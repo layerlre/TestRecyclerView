@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -18,6 +21,7 @@ public class ItemFragment extends Fragment {
     private int mRecyclerviewHeight;
     private MyItemRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
 
     public ItemFragment() {
     }
@@ -32,7 +36,7 @@ public class ItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class ItemFragment extends Fragment {
         // Set the mAdapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            final RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             mLayoutManager = new LinearLayoutManager(context);
             recyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new MyItemRecyclerViewAdapter(DummyContent.ITEMS,mRecyclerviewHeight);
@@ -65,4 +69,22 @@ public class ItemFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_add){
+            String id = String.valueOf(++DummyContent.COUNT);
+            String content = getString(R.string.lorem) + " " + id;
+            String detail = "detail: " + id;
+            DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(id, content, detail);
+            mAdapter.addItem(dummyItem);
+            recyclerView.smoothScrollToPosition(DummyContent.COUNT);
+        }
+        return true;
+    }
 }
