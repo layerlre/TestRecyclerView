@@ -1,6 +1,5 @@
 package com.layernet.testrecyclerview;
 
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,14 +51,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     public void addItem(DummyItem item) {
         mValues.add(item);
-        notifyItemInserted(mValues.size() - 1);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notifyItemChanged(mValues.size() - 2);
-            }
-        }, 400);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
